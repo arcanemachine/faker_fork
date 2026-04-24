@@ -5,7 +5,10 @@ defmodule Faker.Random.Test do
 
   def random_between(left, right) do
     set_seed(:ets.lookup(:seed_registry, self()))
-    Enum.random(left..right)
+
+    # Calls :rand.uniform/1 directly instead of Enum.random/1 so that
+    # doctest results are stable across Elixir versions.
+    left + :rand.uniform(right - left + 1) - 1
   end
 
   def random_bytes(total) do
